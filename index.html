@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horror Filmmaker Map</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231a1918'/%3E%3Cpath d='M32 8c-3 8-10 14-10 24a10 10 0 0020 0C42 22 35 16 32 8z' fill='%23c44' opacity='0.85'/%3E%3Cpath d='M32 18c-1.5 5-5 9-5 15a5 5 0 0010 0c0-6-3.5-10-5-15z' fill='%23e97'/%3E%3Cellipse cx='32' cy='52' rx='6' ry='2' fill='%23c44' opacity='0.3'/%3E%3Cpath d='M29 42c0 0-1 6-3 10' stroke='%23911' stroke-width='1' fill='none' opacity='0.5'/%3E%3C/svg%3E">
+</head>
+<body>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.hm{background:#f7f5f0;color:#1a1918;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:17px;line-height:1.65;padding-bottom:36px}
+.hm-tabs{display:flex;border-bottom:1.5px solid rgba(0,0,0,0.13);padding:0 14px;background:#f7f5f0}
+.hm-tab{padding:12px 20px;font-size:16px;font-family:inherit;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-1.5px;cursor:pointer;color:#7a7a72;transition:color .15s}
+.hm-tab.on{color:#1a1918;border-bottom-color:#1a1918;font-weight:500}
+.hm-panel{display:none;padding:0 14px}
+.hm-panel.on{display:block}
+.hm-legend{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;padding:16px 0 14px;font-size:15px;color:#6b6b65;border-bottom:1px solid rgba(0,0,0,0.08);margin-bottom:16px}
+.leg-item{display:flex;align-items:center;gap:8px}
+.leg-sw{width:16px;height:16px;border-radius:3px;flex-shrink:0}
+.leg-dash{width:24px;border-top:1.5px dashed #888;flex-shrink:0}
+.leg-hint{margin-left:auto;font-size:14px;color:#a0a098;font-style:italic}
+.d-node{cursor:pointer}
+.d-node:hover rect{stroke-width:2.5}
+.d-node.sel rect{stroke-width:3!important;filter:brightness(.94)}
+.hm-detail{margin-top:16px;background:#fff;border:1px solid rgba(0,0,0,0.11);border-radius:12px;padding:22px 24px;display:none}
+.hm-detail.on{display:block}
+.hm-dh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.hm-dname{font-size:22px;font-weight:500;font-family:Georgia,'Times New Roman',serif}
+.hm-badge{font-size:13px;padding:3px 12px;border-radius:20px;white-space:nowrap}
+.hm-ddesc{font-size:16px;line-height:1.75;color:#5a5a52;margin-bottom:18px}
+.hm-sl{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#9b9b93;margin-bottom:10px}
+.hm-films{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.hm-film{background:#f7f5f0;border:1px solid rgba(0,0,0,0.1);border-radius:8px;padding:12px 15px;flex:1;min-width:148px}
+.hm-ft{font-size:16px;font-weight:500;margin-bottom:2px}
+.hm-fy{font-size:13px;color:#9b9b93;margin-bottom:9px}
+.hm-fsc{display:flex;gap:7px;flex-wrap:wrap}
+.sc{font-size:13px;padding:2px 9px;border-radius:20px;font-weight:500}
+.sc-rt{background:#fff0e6;color:#b03800}
+.sc-mc{background:#e8f2e6;color:#195a19}
+.hm-conns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.hm-conn{font-size:14px;padding:5px 14px;border-radius:20px;border:1.5px solid;cursor:pointer;background:#fff;transition:opacity .12s;font-family:inherit;line-height:1.3}
+.hm-conn:hover{opacity:.72}
+.hm-bridges{display:flex;flex-wrap:wrap;gap:7px}
+.hm-bridge{font-size:14px;padding:4px 12px;border-radius:20px;background:#f7f5f0;border:1px solid rgba(0,0,0,0.13);color:#5a5a52}
+.score-note{font-size:13px;color:#a0a098;font-style:italic;padding:10px 0 0;text-align:right}
+.crit-intro{font-size:16px;line-height:1.8;color:#5a5a52;padding:16px 0 22px;border-bottom:1px solid rgba(0,0,0,0.08);margin-bottom:20px}
+.crit-card{background:#fff;border:1px solid rgba(0,0,0,0.1);border-radius:12px;padding:22px 24px;margin-bottom:16px}
+.crit-name{font-size:20px;font-weight:500;font-family:Georgia,serif;margin-bottom:3px}
+.crit-out{font-size:14px;color:#9b9b93;margin-bottom:14px}
+.crit-take{font-size:16px;line-height:1.78;margin-bottom:16px;color:#3a3a34}
+.crit-fl{font-size:12px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:#9b9b93;margin-bottom:8px}
+.crit-tags{display:flex;flex-wrap:wrap;gap:6px}
+.ctag{font-size:13px;padding:3px 11px;border-radius:20px;border:1px solid}
+.about{font-size:16px;line-height:1.82;padding:16px 0 0}
+.about h3{font-size:19px;font-weight:500;font-family:Georgia,serif;margin:22px 0 9px;color:#1a1918}
+.about p{margin-bottom:15px;color:#5a5a52}
+.about strong{color:#1a1918;font-weight:500}
+.abox{background:#fff;border:1px solid rgba(0,0,0,0.1);border-radius:10px;padding:16px 20px;margin:10px 0 18px;font-size:15px;color:#5a5a52;line-height:1.75}
+.abox p{margin:0}
+</style>
+
+<div class="hm">
+<div class="hm-tabs">
+  <button class="hm-tab on" onclick="hmTab('map',this)">Map</button>
+  <button class="hm-tab" onclick="hmTab('critics',this)">Critics</button>
+  <button class="hm-tab" onclick="hmTab('about',this)">About this wave</button>
+</div>
+
+<div class="hm-panel on" id="hm-map">
+  <div class="hm-legend">
+    <div class="leg-item"><div class="leg-sw" style="background:#7F77DD"></div>Folk &amp; ritual</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#1D9E75"></div>Social allegory</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#D85A30"></div>Body &amp; excess</div>
+    <div class="leg-item"><div class="leg-dash"></div>cross-school</div>
+    <div class="leg-hint">↓ click a director for detail</div>
+  </div>
+
+  <svg viewBox="0 0 680 660" width="100%" style="display:block">
+    <text font-size="12" fill="#b0b0a8" text-anchor="middle" x="130" y="44">folk &amp; ritual</text>
+    <text font-size="12" fill="#b0b0a8" text-anchor="middle" x="535" y="44">social allegory</text>
+    <text font-size="12" fill="#b0b0a8" text-anchor="middle" x="340" y="648">body &amp; excess</text>
+    <line x1="130" y1="220" x2="330" y2="110" stroke="#7F77DD" stroke-width="1.5" opacity=".38"/>
+    <line x1="130" y1="220" x2="130" y2="380" stroke="#7F77DD" stroke-width="1.5" opacity=".38"/>
+    <line x1="330" y1="110" x2="130" y2="380" stroke="#7F77DD" stroke-width="1.5" opacity=".38"/>
+    <line x1="535" y1="220" x2="535" y2="390" stroke="#1D9E75" stroke-width="1.5" opacity=".38"/>
+    <line x1="535" y1="220" x2="340" y2="490" stroke="#1D9E75" stroke-width="1.5" opacity=".38"/>
+    <line x1="535" y1="390" x2="340" y2="490" stroke="#1D9E75" stroke-width="1.5" opacity=".38"/>
+    <line x1="215" y1="590" x2="475" y2="590" stroke="#D85A30" stroke-width="1.5" opacity=".38"/>
+    <line x1="330" y1="110" x2="535" y2="220" stroke="#888" stroke-width="1" opacity=".38" stroke-dasharray="5 4"/>
+    <rect x="183" y="153" width="108" height="18" rx="3" fill="#f7f5f0" opacity=".95"/>
+    <text font-size="11" fill="#9b9b93" text-anchor="middle" x="237" y="166">Florence Pugh</text>
+    <g class="d-node" id="dn-eggers" onclick="hmSel('eggers')">
+      <rect x="45" y="194" width="170" height="52" rx="8" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
+      <text font-size="14" font-weight="600" fill="#3C3489" text-anchor="middle" dominant-baseline="central" x="130" y="212">Robert Eggers</text>
+      <text font-size="11" fill="#534AB7" text-anchor="middle" dominant-baseline="central" x="130" y="230">Witch · Lighthouse · Nosferatu</text>
+    </g>
+    <g class="d-node" id="dn-aster" onclick="hmSel('aster')">
+      <rect x="245" y="84" width="170" height="52" rx="8" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
+      <text font-size="14" font-weight="600" fill="#3C3489" text-anchor="middle" dominant-baseline="central" x="330" y="102">Ari Aster</text>
+      <text font-size="11" fill="#534AB7" text-anchor="middle" dominant-baseline="central" x="330" y="120">Hereditary · Midsommar</text>
+    </g>
+    <g class="d-node" id="dn-peele" onclick="hmSel('peele')">
+      <rect x="450" y="194" width="170" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+      <text font-size="14" font-weight="600" fill="#085041" text-anchor="middle" dominant-baseline="central" x="535" y="212">Jordan Peele</text>
+      <text font-size="11" fill="#0F6E56" text-anchor="middle" dominant-baseline="central" x="535" y="230">Get Out · Us · Nope</text>
+    </g>
+    <g class="d-node" id="dn-kent" onclick="hmSel('kent')">
+      <rect x="45" y="354" width="170" height="52" rx="8" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
+      <text font-size="14" font-weight="600" fill="#3C3489" text-anchor="middle" dominant-baseline="central" x="130" y="372">Jennifer Kent</text>
+      <text font-size="11" fill="#534AB7" text-anchor="middle" dominant-baseline="central" x="130" y="390">The Babadook</text>
+    </g>
+    <g class="d-node" id="dn-cregger" onclick="hmSel('cregger')">
+      <rect x="450" y="364" width="170" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+      <text font-size="14" font-weight="600" fill="#085041" text-anchor="middle" dominant-baseline="central" x="535" y="382">Zach Cregger</text>
+      <text font-size="11" fill="#0F6E56" text-anchor="middle" dominant-baseline="central" x="535" y="400">Barbarian · Weapons</text>
+    </g>
+    <g class="d-node" id="dn-coogler" onclick="hmSel('coogler')">
+      <rect x="255" y="464" width="170" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+      <text font-size="14" font-weight="600" fill="#085041" text-anchor="middle" dominant-baseline="central" x="340" y="482">Ryan Coogler</text>
+      <text font-size="11" fill="#0F6E56" text-anchor="middle" dominant-baseline="central" x="340" y="500">Sinners</text>
+    </g>
+    <g class="d-node" id="dn-tiwest" onclick="hmSel('tiwest')">
+      <rect x="130" y="564" width="170" height="52" rx="8" fill="#FAECE7" stroke="#D85A30" stroke-width="1"/>
+      <text font-size="14" font-weight="600" fill="#712B13" text-anchor="middle" dominant-baseline="central" x="215" y="582">Ti West</text>
+      <text font-size="11" fill="#993C1D" text-anchor="middle" dominant-baseline="central" x="215" y="600">X · Pearl · MaXXXine</text>
+    </g>
+    <g class="d-node" id="dn-fargeat" onclick="hmSel('fargeat')">
+      <rect x="390" y="564" width="170" height="52" rx="8" fill="#FAECE7" stroke="#D85A30" stroke-width="1"/>
+      <text font-size="14" font-weight="600" fill="#712B13" text-anchor="middle" dominant-baseline="central" x="475" y="582">Coralie Fargeat</text>
+      <text font-size="11" fill="#993C1D" text-anchor="middle" dominant-baseline="central" x="475" y="600">The Substance</text>
+    </g>
+  </svg>
+
+  <div class="hm-detail" id="hm-detail"></div>
+  <p class="score-note">* Scores approximate — verify on Rotten Tomatoes / Metacritic</p>
+</div>
+
+<div class="hm-panel" id="hm-critics">
+  <p class="crit-intro">A handful of critics have followed this wave closely enough to have a coherent map of the whole landscape. Their perspectives help locate which films speak to which sensibility — and why the wave happened when it did.</p>
+
+  <div class="crit-card">
+    <div class="crit-name">David Ehrlich</div>
+    <div class="crit-out">IndieWire — Chief Film Critic</div>
+    <p class="crit-take">Ehrlich has been the most consistent journalistic champion of this wave, treating it not as a genre trend but as the most vital current in contemporary cinema. His frame: horror is uniquely positioned to name collective anxieties that other genres soften. He argued early that Hereditary deserved the same critical vocabulary applied to Bergman. Gave Barbarian a rare A, called Midsommar "triumphant even in its self-indulgence." He tends to rate the more formally ambitious work highly even when it frustrates — Beau is Afraid divided most critics; Ehrlich was among the few who defended its logic. His ongoing argument is that horror's low-culture reputation has caused critics to miss the sharpest filmmaking of the decade.</p>
+    <div class="crit-fl">Films championed</div>
+    <div class="crit-tags">
+      <span class="ctag" style="background:#EEEDFE;color:#534AB7;border-color:#AFA9EC">Hereditary</span>
+      <span class="ctag" style="background:#EEEDFE;color:#534AB7;border-color:#AFA9EC">Midsommar</span>
+      <span class="ctag" style="background:#EEEDFE;color:#534AB7;border-color:#AFA9EC">The Witch</span>
+      <span class="ctag" style="background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5">Get Out</span>
+      <span class="ctag" style="background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5">Barbarian</span>
+      <span class="ctag" style="background:#FAECE7;color:#993C1D;border-color:#F0997B">The Substance</span>
+    </div>
+  </div>
+
+  <div class="crit-card">
+    <div class="crit-name">Bilge Ebiri</div>
+    <div class="crit-out">Vulture / New York Times</div>
+    <p class="crit-take">Ebiri has written specifically about the horror renaissance as a cultural moment, not just a series of good films. His frame sits at the intersection of film history and sociology: the best horror always reflects the moment it was made in, and this wave is inseparable from the post-2016 atmosphere of paranoia, bodily anxiety, and institutional failure. He's particularly strong on the Peele films' relationship to the long tradition of Black American Gothic — and on what Fargeat and the body horror strand are doing that the male-authored genre never quite managed. Thoughtful on Sinners as a film about what it means to make art while being systematically erased.</p>
+    <div class="crit-fl">Films championed</div>
+    <div class="crit-tags">
+      <span class="ctag" style="background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5">Get Out</span>
+      <span class="ctag" style="background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5">Us</span>
+      <span class="ctag" style="background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5">Sinners</span>
+      <span class="ctag" style="background:#FAECE7;color:#993C1D;border-color:#F0997B">The Substance</span>
+      <span class="ctag" style="background:#EEEDFE;color:#534AB7;border-color:#AFA9EC">Nosferatu</span>
+      <span class="ctag" style="background:#EEEDFE;color:#534AB7;border-color:#AFA9EC">Midsommar</span>
+    </div>
+  </div>
+
+  <div class="crit-card">
+    <div class="crit-name">Brian Tallerico</div>
+    <div class="crit-out">RogerEbert.com — Managing Editor</div>
+    <p class="crit-take">The most consistent across the entire landscape — has reviewed nearly everything here and brings a frame that's less theoretical than Ehrlich or Ebiri, more interested in craft and genre mechanics. His Weapons review compared Cregger to Paul Thomas Anderson (Magnolia) and George Romero (The Crazies) in the same breath, which tells you how he holds the genre. His criterion: ambition has to be earned by execution. He defends Beau is Afraid less than Ehrlich. He was early on Barbarian and gave it four stars. His overall take on the wave: horror has earned its prestige, but the films that deserve it are the ones that deliver genre satisfaction alongside the ideas — not one at the expense of the other.</p>
+    <div class="crit-fl">Films championed</div>
+    <div class="crit-tags">
+      <span class="ctag" style="background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5">Weapons</span>
+      <span class="ctag" style="background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5">Barbarian</span>
+      <span class="ctag" style="background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5">Sinners</span>
+      <span class="ctag" style="background:#EEEDFE;color:#534AB7;border-color:#AFA9EC">Hereditary</span>
+      <span class="ctag" style="background:#E1F5EE;color:#0F6E56;border-color:#5DCAA5">Get Out</span>
+      <span class="ctag" style="background:#FAECE7;color:#993C1D;border-color:#F0997B">The Substance</span>
+    </div>
+  </div>
+</div>
+
+<div class="hm-panel" id="hm-about">
+  <div class="about">
+    <h3>What you're looking at</h3>
+    <p>This is not a map of all horror. It's a specific slice — roughly 2014 to 2025 — sometimes called <strong>elevated horror</strong> or <strong>prestige horror</strong>, though most of the filmmakers on it resist those labels. The wave emerged when a set of directors started treating horror as a formal language for ideas rather than a delivery mechanism for scares.</p>
+
+    <h3>The filter that produced this map</h3>
+    <p>Three conditions, roughly: <strong>(1) Authorial voice</strong> — you could identify these directors in a single frame. <strong>(2) Critical traction beyond genre fandom</strong> — reviews in mainstream outlets, awards consideration, serious essay coverage. <strong>(3) Thematic ambition</strong> — the horror is in service of something: grief, race, bodily autonomy, community collapse, systemic violence.</p>
+
+    <h3>What is not here</h3>
+    <div class="abox"><p>Franchise horror (The Conjuring universe, Insidious, Annabelle). Blumhouse's commercial output. Slasher revivals. Found footage. James Wan, who is skilled, but operating in a different register. <strong>Mike Flanagan</strong> (The Haunting of Hill House, Midnight Mass, The Fall of the House of Usher) is the significant omission — his work is excellent and would sit in the folk/psychological cluster, but it's primarily streaming television, which feels like a separate conversation about a different medium.</p></div>
+
+    <h3>Where it started</h3>
+    <p><strong>The Babadook (2014)</strong> is the origin point most critics agree on — the film that proved horror could be entirely, unambiguously about what it appeared to be about (grief, single motherhood, depression) without sacrificing genre effectiveness. It arrived before A24 had consolidated its identity and gave critics a new template.</p>
+    <p><strong>Get Out (2017)</strong> was the tipping point. It made the wave impossible to ignore, won the Oscar for original screenplay, and proved the commercial argument. After Get Out, studios understood this could work at scale.</p>
+
+    <h3>The A24 effect</h3>
+    <p>A24 created an aesthetic permission structure. Eggers, Aster, and Ti West all made their defining films through A24. The studio proved that art-cinema sensibility and horror genre mechanics could share a marketplace — and that the audience existed. The <strong>A24 aesthetic</strong> (slow, cold, image-obsessed, thematically loaded) became so influential that films not released by A24 started being described in those terms anyway.</p>
+
+    <h3>What connects it all</h3>
+    <p>These films share a conviction that horror's job is not just to scare but to <strong>name something true about right now</strong>. They also share patience — a willingness to let dread build rather than deliver scares on schedule. And they share a high tolerance for ambiguity: most of them refuse to resolve cleanly, which is itself a formal argument about the world they're depicting.</p>
+  </div>
+</div>
+</div>
+
+<script>
+function hmTab(id,btn){
+  document.querySelectorAll('.hm-panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.hm-tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('hm-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+const SC={
+  folk:{bg:'#EEEDFE',color:'#534AB7',border:'#7F77DD',label:'Folk & ritual'},
+  social:{bg:'#E1F5EE',color:'#0F6E56',border:'#1D9E75',label:'Social allegory'},
+  body:{bg:'#FAECE7',color:'#993C1D',border:'#D85A30',label:'Body & excess'}
+};
+
+const DIR={
+  eggers:{name:'Robert Eggers',school:'folk',
+    desc:'Period horror built from obsessive historical research. Atmosphere and texture over plot — his worlds feel genuinely of their time. Slow, cold, and formally severe.',
+    films:[{t:'The Witch',y:2015,rt:91,mc:83},{t:'The Lighthouse',y:2019,rt:91,mc:83},{t:'Nosferatu',y:2024,rt:86,mc:79}],
+    conns:[{id:'aster',label:'A24 folk horror — craft-obsessed'},{id:'kent',label:'Slow dread, grief, atmosphere over plot'}],
+    bridges:['Florence Pugh — Midsommar (Aster) and Nosferatu (Eggers)','Willem Dafoe — The Lighthouse']},
+  aster:{name:'Ari Aster',school:'folk',
+    desc:'Grief as the engine of horror. Meticulous tonal control. His films are slow, punishing, and feel like attending a ritual you cannot leave. The most formally demanding voice in the wave.',
+    films:[{t:'Hereditary',y:2018,rt:92,mc:87},{t:'Midsommar',y:2019,rt:84,mc:73},{t:'Beau is Afraid',y:2023,rt:68,mc:72}],
+    conns:[{id:'eggers',label:'A24 folk horror — craft-obsessed'},{id:'kent',label:'Horror rooted in grief and loss'},{id:'peele',label:'Elevated horror contemporaries (cross-school)'}],
+    bridges:['Florence Pugh — Midsommar (Aster) and Nosferatu (Eggers)']},
+  peele:{name:'Jordan Peele',school:'social',
+    desc:'Horror as social thesis. The genre mechanics are inseparable from the argument being made about race in America. The filmmaker who made this wave critically legitimate and commercially viable.',
+    films:[{t:'Get Out',y:2017,rt:98,mc:84},{t:'Us',y:2019,rt:93,mc:81},{t:'Nope',y:2022,rt:83,mc:72}],
+    conns:[{id:'cregger',label:'Social allegory, structural reveals'},{id:'coogler',label:'Black American horror, community'},{id:'aster',label:'Elevated horror contemporaries (cross-school)'}],
+    bridges:['Lupita Nyong\'o — Us (Peele); also connected to Get Out era cast']},
+  kent:{name:'Jennifer Kent',school:'folk',
+    desc:'Australian director who made one of the wave\'s defining films and largely stepped back. The Babadook redefined what grief-as-monster could mean — it preceded A24\'s consolidation and gave critics a new template.',
+    films:[{t:'The Babadook',y:2014,rt:98,mc:86}],
+    conns:[{id:'eggers',label:'Slow dread, atmosphere over plot'},{id:'aster',label:'Horror rooted in grief and loss'}],
+    bridges:[]},
+  cregger:{name:'Zach Cregger',school:'social',
+    desc:'Former sketch comedian (Whitest Kids U\'Know). Horror as social X-ray — what does the monster reveal about who built the house? Deliberately refuses to underline themes. Messier and more ambiguous than Peele.',
+    films:[{t:'Barbarian',y:2022,rt:99,mc:80},{t:'Weapons',y:2025,rt:93,mc:81}],
+    conns:[{id:'peele',label:'Social allegory, structural reveals'},{id:'coogler',label:'Horror as community autopsy'}],
+    bridges:['Julia Garner (Weapons) — Emmy-winning Ozark lead, bridging prestige TV and horror']},
+  coogler:{name:'Ryan Coogler',school:'social',
+    desc:'Black Panther director who made a vampire film that\'s really about blues music, the Jim Crow South, and cultural appropriation. Won 4 Oscars including Best Actor (Michael B. Jordan) and Best Screenplay.',
+    films:[{t:'Sinners',y:2025,rt:97,mc:85}],
+    conns:[{id:'peele',label:'Black American horror, social commentary'},{id:'cregger',label:'Horror as community autopsy'}],
+    bridges:['Michael B. Jordan — plays twin brothers Smoke and Stack; won Best Actor Oscar']},
+  tiwest:{name:'Ti West',school:'body',
+    desc:'70s and 80s genre horror reconstructed with modern craft. His X/Pearl/MaXXXine trilogy is the most formally ambitious project in recent horror — three films, three genres, one lead actress, all shot in sequence.',
+    films:[{t:'X',y:2022,rt:83,mc:72},{t:'Pearl',y:2022,rt:88,mc:78},{t:'MaXXXine',y:2024,rt:80,mc:67}],
+    conns:[{id:'fargeat',label:'Body horror, female lead, genre excess'}],
+    bridges:['Mia Goth — leads all three Ti West films; one of the great performances of the decade across the trilogy']},
+  fargeat:{name:'Coralie Fargeat',school:'body',
+    desc:'French director. Body horror as feminist argument. The Substance is as angry as horror gets — excess and disgust weaponized against how women are made to feel about aging. Won Cannes Best Screenplay.',
+    films:[{t:'The Substance',y:2024,rt:87,mc:74}],
+    conns:[{id:'tiwest',label:'Body horror, female lead, genre excess'}],
+    bridges:['Demi Moore — career-redefining lead performance; connects to the Hollywood-eating-its-own-theme']}
+};
+
+let cur=null;
+function hmSel(id){
+  if(cur){const p=document.getElementById('dn-'+cur);if(p)p.classList.remove('sel')}
+  cur=id;
+  const n=document.getElementById('dn-'+id);if(n)n.classList.add('sel');
+  const d=DIR[id];
+  const sc=SC[d.school];
+  const films=d.films.map(f=>`<div class="hm-film"><div class="hm-ft">${f.t}</div><div class="hm-fy">${f.y}</div><div class="hm-fsc"><span class="sc sc-rt">RT ${f.rt}%</span><span class="sc sc-mc">MC ${f.mc}</span></div></div>`).join('');
+  const conns=d.conns.map(c=>{const cd=DIR[c.id];const cs=SC[cd.school];return`<button class="hm-conn" style="border-color:${cs.border};color:${cs.color}" onclick="hmSel('${c.id}')">${cd.name} — ${c.label}</button>`}).join('');
+  const bridges=d.bridges&&d.bridges.length?`<div class="hm-sl" style="margin-top:14px">Cross-film bridges</div><div class="hm-bridges">${d.bridges.map(b=>`<span class="hm-bridge">↔ ${b}</span>`).join('')}</div>`:'';
+  const el=document.getElementById('hm-detail');
+  el.classList.add('on');
+  el.innerHTML=`<div class="hm-dh"><span class="hm-dname">${d.name}</span><span class="hm-badge" style="background:${sc.bg};color:${sc.color}">${sc.label}</span></div><p class="hm-ddesc">${d.desc}</p><div class="hm-sl">Films</div><div class="hm-films">${films}</div><div class="hm-sl">Connected to</div><div class="hm-conns">${conns}</div>${bridges}`;
+  setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
+}
+</script>
+</body>
+</html>
