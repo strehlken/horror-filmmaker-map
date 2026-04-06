@@ -58,6 +58,17 @@
 .about strong{color:#1a1918;font-weight:500}
 .abox{background:#fff;border:1px solid rgba(0,0,0,0.1);border-radius:10px;padding:16px 20px;margin:10px 0 18px;font-size:15px;color:#5a5a52;line-height:1.75}
 .abox p{margin:0}
+
+/* READING PANEL */
+.hm-reading-btn{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:10px 22px;font-size:15px;font-family:Georgia,'Times New Roman',serif;font-weight:500;background:#1a1918;color:#f7f5f0;border:none;border-radius:8px;cursor:pointer;transition:opacity .15s}
+.hm-reading-btn:hover{opacity:.82}
+.hm-reading-btn .arrow{font-size:18px;transition:transform .2s}
+.hm-reading-btn.open .arrow{transform:rotate(90deg)}
+.hm-reading-wrap{margin-top:20px;border:1px solid rgba(0,0,0,0.11);border-radius:12px;overflow:hidden;display:none}
+.hm-reading-wrap.on{display:block}
+.hm-reading-wrap .reading-loading{padding:40px;text-align:center;color:#9b9b93;font-size:15px}
+.hm-reading-link{display:inline-block;margin-top:10px;font-size:14px;color:#9b9b93;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif}
+.hm-reading-link:hover{color:#1a1918;text-decoration:underline}
 </style>
 
 <div class="hm">
@@ -76,63 +87,69 @@
     <div class="leg-hint">↓ click a director for detail</div>
   </div>
 
-  <svg viewBox="0 0 680 660" width="100%" style="display:block">
-    <text font-size="12" fill="#b0b0a8" text-anchor="middle" x="130" y="44">folk &amp; ritual</text>
-    <text font-size="12" fill="#b0b0a8" text-anchor="middle" x="535" y="44">social allegory</text>
-    <text font-size="12" fill="#b0b0a8" text-anchor="middle" x="340" y="648">body &amp; excess</text>
-    <line x1="130" y1="220" x2="330" y2="110" stroke="#7F77DD" stroke-width="1.5" opacity=".38"/>
-    <line x1="130" y1="220" x2="130" y2="380" stroke="#7F77DD" stroke-width="1.5" opacity=".38"/>
-    <line x1="330" y1="110" x2="130" y2="380" stroke="#7F77DD" stroke-width="1.5" opacity=".38"/>
-    <line x1="535" y1="220" x2="535" y2="390" stroke="#1D9E75" stroke-width="1.5" opacity=".38"/>
-    <line x1="535" y1="220" x2="340" y2="490" stroke="#1D9E75" stroke-width="1.5" opacity=".38"/>
-    <line x1="535" y1="390" x2="340" y2="490" stroke="#1D9E75" stroke-width="1.5" opacity=".38"/>
-    <line x1="215" y1="590" x2="475" y2="590" stroke="#D85A30" stroke-width="1.5" opacity=".38"/>
-    <line x1="330" y1="110" x2="535" y2="220" stroke="#888" stroke-width="1" opacity=".38" stroke-dasharray="5 4"/>
-    <rect x="183" y="153" width="108" height="18" rx="3" fill="#f7f5f0" opacity=".95"/>
-    <text font-size="11" fill="#9b9b93" text-anchor="middle" x="237" y="166">Florence Pugh</text>
+  <svg viewBox="0 0 820 485" width="100%" style="display:block;max-width:720px;margin:0 auto">
+    <text font-size="14.5" fill="#b0b0a8" text-anchor="middle" x="120" y="38">folk &amp; ritual</text>
+    <text font-size="14.5" fill="#b0b0a8" text-anchor="middle" x="660" y="38">social allegory</text>
+    <text font-size="14.5" fill="#b0b0a8" text-anchor="middle" x="410" y="478">body &amp; excess</text>
+    <!-- folk triangle -->
+    <line x1="120" y1="181" x2="400" y2="89" stroke="#7F77DD" stroke-width="1.5" opacity=".38"/>
+    <line x1="120" y1="181" x2="120" y2="273" stroke="#7F77DD" stroke-width="1.5" opacity=".38"/>
+    <line x1="400" y1="89" x2="120" y2="273" stroke="#7F77DD" stroke-width="1.5" opacity=".38"/>
+    <!-- social triangle -->
+    <line x1="660" y1="181" x2="660" y2="273" stroke="#1D9E75" stroke-width="1.5" opacity=".38"/>
+    <line x1="660" y1="181" x2="400" y2="349" stroke="#1D9E75" stroke-width="1.5" opacity=".38"/>
+    <line x1="660" y1="273" x2="400" y2="349" stroke="#1D9E75" stroke-width="1.5" opacity=".38"/>
+    <!-- body line -->
+    <line x1="240" y1="425" x2="580" y2="425" stroke="#D85A30" stroke-width="1.5" opacity=".38"/>
+    <!-- cross-school dashed -->
+    <line x1="400" y1="89" x2="660" y2="181" stroke="#888" stroke-width="1" opacity=".38" stroke-dasharray="5 4"/>
+    <!-- Florence Pugh bridge label -->
+    <rect x="205" y="125" width="120" height="20" rx="3" fill="#f7f5f0" opacity=".95"/>
+    <text font-size="14" fill="#9b9b93" text-anchor="middle" x="265" y="139">Florence Pugh</text>
     <g class="d-node" id="dn-eggers" onclick="hmSel('eggers')">
-      <rect x="45" y="194" width="170" height="52" rx="8" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
-      <text font-size="14" font-weight="600" fill="#3C3489" text-anchor="middle" dominant-baseline="central" x="130" y="212">Robert Eggers</text>
-      <text font-size="11" fill="#534AB7" text-anchor="middle" dominant-baseline="central" x="130" y="230">Witch · Lighthouse · Nosferatu</text>
+      <rect x="22" y="152" width="195" height="58" rx="8" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
+      <text font-size="18" font-weight="600" fill="#3C3489" text-anchor="middle" dominant-baseline="central" x="120" y="172">Robert Eggers</text>
+      <text font-size="14" fill="#534AB7" text-anchor="middle" dominant-baseline="central" x="120" y="194">Witch · Lighthouse · Nosferatu</text>
     </g>
     <g class="d-node" id="dn-aster" onclick="hmSel('aster')">
-      <rect x="245" y="84" width="170" height="52" rx="8" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
-      <text font-size="14" font-weight="600" fill="#3C3489" text-anchor="middle" dominant-baseline="central" x="330" y="102">Ari Aster</text>
-      <text font-size="11" fill="#534AB7" text-anchor="middle" dominant-baseline="central" x="330" y="120">Hereditary · Midsommar</text>
+      <rect x="302" y="60" width="195" height="58" rx="8" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
+      <text font-size="18" font-weight="600" fill="#3C3489" text-anchor="middle" dominant-baseline="central" x="400" y="80">Ari Aster</text>
+      <text font-size="14" fill="#534AB7" text-anchor="middle" dominant-baseline="central" x="400" y="102">Hereditary · Midsommar</text>
     </g>
     <g class="d-node" id="dn-peele" onclick="hmSel('peele')">
-      <rect x="450" y="194" width="170" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
-      <text font-size="14" font-weight="600" fill="#085041" text-anchor="middle" dominant-baseline="central" x="535" y="212">Jordan Peele</text>
-      <text font-size="11" fill="#0F6E56" text-anchor="middle" dominant-baseline="central" x="535" y="230">Get Out · Us · Nope</text>
+      <rect x="562" y="152" width="195" height="58" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+      <text font-size="18" font-weight="600" fill="#085041" text-anchor="middle" dominant-baseline="central" x="660" y="172">Jordan Peele</text>
+      <text font-size="14" fill="#0F6E56" text-anchor="middle" dominant-baseline="central" x="660" y="194">Get Out · Us · Nope</text>
     </g>
     <g class="d-node" id="dn-kent" onclick="hmSel('kent')">
-      <rect x="45" y="354" width="170" height="52" rx="8" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
-      <text font-size="14" font-weight="600" fill="#3C3489" text-anchor="middle" dominant-baseline="central" x="130" y="372">Jennifer Kent</text>
-      <text font-size="11" fill="#534AB7" text-anchor="middle" dominant-baseline="central" x="130" y="390">The Babadook</text>
+      <rect x="22" y="244" width="195" height="58" rx="8" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
+      <text font-size="18" font-weight="600" fill="#3C3489" text-anchor="middle" dominant-baseline="central" x="120" y="264">Jennifer Kent</text>
+      <text font-size="14" fill="#534AB7" text-anchor="middle" dominant-baseline="central" x="120" y="286">The Babadook</text>
     </g>
     <g class="d-node" id="dn-cregger" onclick="hmSel('cregger')">
-      <rect x="450" y="364" width="170" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
-      <text font-size="14" font-weight="600" fill="#085041" text-anchor="middle" dominant-baseline="central" x="535" y="382">Zach Cregger</text>
-      <text font-size="11" fill="#0F6E56" text-anchor="middle" dominant-baseline="central" x="535" y="400">Barbarian · Weapons</text>
+      <rect x="562" y="244" width="195" height="58" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+      <text font-size="18" font-weight="600" fill="#085041" text-anchor="middle" dominant-baseline="central" x="660" y="264">Zach Cregger</text>
+      <text font-size="14" fill="#0F6E56" text-anchor="middle" dominant-baseline="central" x="660" y="286">Barbarian · Weapons</text>
     </g>
     <g class="d-node" id="dn-coogler" onclick="hmSel('coogler')">
-      <rect x="255" y="464" width="170" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
-      <text font-size="14" font-weight="600" fill="#085041" text-anchor="middle" dominant-baseline="central" x="340" y="482">Ryan Coogler</text>
-      <text font-size="11" fill="#0F6E56" text-anchor="middle" dominant-baseline="central" x="340" y="500">Sinners</text>
+      <rect x="302" y="320" width="195" height="58" rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="1"/>
+      <text font-size="18" font-weight="600" fill="#085041" text-anchor="middle" dominant-baseline="central" x="400" y="340">Ryan Coogler</text>
+      <text font-size="14" fill="#0F6E56" text-anchor="middle" dominant-baseline="central" x="400" y="362">Sinners</text>
     </g>
     <g class="d-node" id="dn-tiwest" onclick="hmSel('tiwest')">
-      <rect x="130" y="564" width="170" height="52" rx="8" fill="#FAECE7" stroke="#D85A30" stroke-width="1"/>
-      <text font-size="14" font-weight="600" fill="#712B13" text-anchor="middle" dominant-baseline="central" x="215" y="582">Ti West</text>
-      <text font-size="11" fill="#993C1D" text-anchor="middle" dominant-baseline="central" x="215" y="600">X · Pearl · MaXXXine</text>
+      <rect x="142" y="396" width="195" height="58" rx="8" fill="#FAECE7" stroke="#D85A30" stroke-width="1"/>
+      <text font-size="18" font-weight="600" fill="#712B13" text-anchor="middle" dominant-baseline="central" x="240" y="416">Ti West</text>
+      <text font-size="14" fill="#993C1D" text-anchor="middle" dominant-baseline="central" x="240" y="438">X · Pearl · MaXXXine</text>
     </g>
     <g class="d-node" id="dn-fargeat" onclick="hmSel('fargeat')">
-      <rect x="390" y="564" width="170" height="52" rx="8" fill="#FAECE7" stroke="#D85A30" stroke-width="1"/>
-      <text font-size="14" font-weight="600" fill="#712B13" text-anchor="middle" dominant-baseline="central" x="475" y="582">Coralie Fargeat</text>
-      <text font-size="11" fill="#993C1D" text-anchor="middle" dominant-baseline="central" x="475" y="600">The Substance</text>
+      <rect x="482" y="396" width="195" height="58" rx="8" fill="#FAECE7" stroke="#D85A30" stroke-width="1"/>
+      <text font-size="18" font-weight="600" fill="#712B13" text-anchor="middle" dominant-baseline="central" x="580" y="416">Coralie Fargeat</text>
+      <text font-size="14" fill="#993C1D" text-anchor="middle" dominant-baseline="central" x="580" y="438">The Substance</text>
     </g>
   </svg>
 
   <div class="hm-detail" id="hm-detail"></div>
+  <div class="hm-reading-wrap" id="hm-reading"></div>
   <p class="score-note">* Scores approximate — verify on Rotten Tomatoes / Metacritic</p>
 </div>
 
@@ -223,6 +240,15 @@ const SC={
   body:{bg:'#FAECE7',color:'#993C1D',border:'#D85A30',label:'Body & excess'}
 };
 
+/* READINGS REGISTRY — add entries here as you create new readings */
+const READINGS={
+  aster:{file:'readings/hereditary.html',label:'Hereditary — A Reading'}
+  /* Future readings:
+  eggers:{file:'readings/nosferatu.html',label:'Nosferatu — A Reading'},
+  peele:{file:'readings/get-out.html',label:'Get Out — A Reading'},
+  */
+};
+
 const DIR={
   eggers:{name:'Robert Eggers',school:'folk',
     desc:'Period horror built from obsessive historical research. Atmosphere and texture over plot — his worlds feel genuinely of their time. Slow, cold, and formally severe.',
@@ -266,6 +292,10 @@ const DIR={
     bridges:['Demi Moore — career-redefining lead performance; connects to the Hollywood-eating-its-own-theme']}
 };
 
+/* Reading cache — fetched HTML stored here so repeat toggles are instant */
+const readingCache={};
+let readingOpen=null;
+
 let cur=null;
 function hmSel(id){
   if(cur){const p=document.getElementById('dn-'+cur);if(p)p.classList.remove('sel')}
@@ -276,10 +306,89 @@ function hmSel(id){
   const films=d.films.map(f=>`<div class="hm-film"><div class="hm-ft">${f.t}</div><div class="hm-fy">${f.y}</div><div class="hm-fsc"><span class="sc sc-rt">RT ${f.rt}%</span><span class="sc sc-mc">MC ${f.mc}</span></div></div>`).join('');
   const conns=d.conns.map(c=>{const cd=DIR[c.id];const cs=SC[cd.school];return`<button class="hm-conn" style="border-color:${cs.border};color:${cs.color}" onclick="hmSel('${c.id}')">${cd.name} — ${c.label}</button>`}).join('');
   const bridges=d.bridges&&d.bridges.length?`<div class="hm-sl" style="margin-top:14px">Cross-film bridges</div><div class="hm-bridges">${d.bridges.map(b=>`<span class="hm-bridge">↔ ${b}</span>`).join('')}</div>`:'';
+
+  /* Reading button — only if this director has a reading */
+  const rd=READINGS[id];
+  const readingBtn=rd?`<button class="hm-reading-btn" onclick="toggleReading('${id}')" id="reading-btn-${id}"><span class="arrow">&#9654;</span> ${rd.label}</button><br><a class="hm-reading-link" href="${rd.file}" target="_blank">Open as standalone page &rarr;</a>`:'';
+
   const el=document.getElementById('hm-detail');
   el.classList.add('on');
-  el.innerHTML=`<div class="hm-dh"><span class="hm-dname">${d.name}</span><span class="hm-badge" style="background:${sc.bg};color:${sc.color}">${sc.label}</span></div><p class="hm-ddesc">${d.desc}</p><div class="hm-sl">Films</div><div class="hm-films">${films}</div><div class="hm-sl">Connected to</div><div class="hm-conns">${conns}</div>${bridges}`;
+  el.innerHTML=`<div class="hm-dh"><span class="hm-dname">${d.name}</span><span class="hm-badge" style="background:${sc.bg};color:${sc.color}">${sc.label}</span></div><p class="hm-ddesc">${d.desc}</p><div class="hm-sl">Films</div><div class="hm-films">${films}</div><div class="hm-sl">Connected to</div><div class="hm-conns">${conns}</div>${bridges}${readingBtn}`;
+
+  /* Collapse any open reading when switching directors */
+  const rw=document.getElementById('hm-reading');
+  rw.classList.remove('on');
+  rw.innerHTML='';
+  readingOpen=null;
+
   setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
+}
+
+function toggleReading(id){
+  const rw=document.getElementById('hm-reading');
+  const btn=document.getElementById('reading-btn-'+id);
+
+  /* If already open for this director, collapse */
+  if(readingOpen===id){
+    rw.classList.remove('on');
+    rw.innerHTML='';
+    readingOpen=null;
+    if(btn)btn.classList.remove('open');
+    return;
+  }
+
+  readingOpen=id;
+  if(btn)btn.classList.add('open');
+
+  /* If cached, inject immediately */
+  if(readingCache[id]){
+    rw.innerHTML=readingCache[id];
+    rw.classList.add('on');
+    setTimeout(()=>rw.scrollIntoView({behavior:'smooth',block:'start'}),60);
+    return;
+  }
+
+  /* Show loading state, then fetch */
+  rw.innerHTML='<div class="reading-loading">Loading reading...</div>';
+  rw.classList.add('on');
+
+  const rd=READINGS[id];
+  fetch(rd.file)
+    .then(r=>{if(!r.ok)throw new Error(r.status);return r.text()})
+    .then(html=>{
+      /* Parse the fetched HTML and extract the reading-content div */
+      const doc=new DOMParser().parseFromString(html,'text/html');
+
+      /* Grab the <style> block so scoped CSS comes along */
+      const styles=doc.querySelectorAll('style');
+      let styleHTML='';
+      styles.forEach(s=>{styleHTML+=s.outerHTML});
+
+      /* Grab the Google Fonts link */
+      const fonts=doc.querySelectorAll('link[href*="fonts.googleapis"]');
+      let fontHTML='';
+      fonts.forEach(f=>{
+        /* Only inject if not already present */
+        if(!document.querySelector('link[href="'+f.getAttribute('href')+'"]')){
+          const link=document.createElement('link');
+          link.rel='stylesheet';
+          link.href=f.getAttribute('href');
+          document.head.appendChild(link);
+        }
+      });
+
+      /* Grab the wrapper div with all content */
+      const wrapper=doc.querySelector('.reading-hereditary')||doc.querySelector('.reading-content');
+      const content=wrapper?wrapper.outerHTML:'<p>Could not load reading content.</p>';
+
+      const result=styleHTML+content;
+      readingCache[id]=result;
+      rw.innerHTML=result;
+      setTimeout(()=>rw.scrollIntoView({behavior:'smooth',block:'start'}),60);
+    })
+    .catch(err=>{
+      rw.innerHTML=`<div class="reading-loading">Could not load reading. <a href="${rd.file}" target="_blank">Open directly &rarr;</a></div>`;
+    });
 }
 </script>
 </body>
