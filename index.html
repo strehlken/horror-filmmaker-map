@@ -379,6 +379,15 @@ function toggleReading(id){
 
       /* Grab the wrapper div with all content */
       const wrapper=doc.querySelector('.reading-hereditary')||doc.querySelector('.reading-content');
+      /* Rewrite relative links to resolve against readings/ dir */
+      if(wrapper){
+        const base=rd.file.substring(0,rd.file.lastIndexOf('/')+1);
+        wrapper.querySelectorAll('a[href]').forEach(a=>{
+          const h=a.getAttribute('href');
+          if(h&&!h.startsWith('http')&&!h.startsWith('/')&&!h.startsWith('#')&&!h.startsWith('mailto:'))
+            a.setAttribute('href',base+h);
+        });
+      }
       const content=wrapper?wrapper.outerHTML:'<p>Could not load reading content.</p>';
 
       const result=styleHTML+content;
